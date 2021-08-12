@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../model/transaction.dart';
-
+/**
+ * this class is basically for taking the user input
+ */
 class MovieDialog extends StatefulWidget {
   final Transaction? transaction;
+  //this function will be responsible for passing the fields
   final Function(String name, String directorname, String? filepat) onClickedDone;
 
   const MovieDialog({
@@ -18,6 +21,7 @@ class MovieDialog extends StatefulWidget {
 }
 
 class _MovieDialogState extends State<MovieDialog> {
+  //taking the reference of key for state management
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final amountController = TextEditingController();
@@ -30,10 +34,10 @@ class _MovieDialogState extends State<MovieDialog> {
     setState(() {
        if (widget.transaction != null) {
       final transaction = widget.transaction!;
-
+       
       nameController.text = transaction.movieName!;
       amountController.text = transaction.directorname!;
-      // isExpense = transaction.isExpense;
+     
     }
     });
 
@@ -54,6 +58,7 @@ class _MovieDialogState extends State<MovieDialog> {
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.transaction != null;
+    //checking wether user have to add or update
     final title = isEditing ? 'Edit Movie' : 'Add Movie';
 
     return AlertDialog(
@@ -67,10 +72,10 @@ class _MovieDialogState extends State<MovieDialog> {
               SizedBox(height: 8),
               buildName(),
               SizedBox(height: 8),
-              buildAmount(),
+              buildDirectorName(),
               SizedBox(height: 8),
              
-             // buildRadioButtons(),
+             
             ],
           ),
         ),
@@ -95,7 +100,7 @@ class _MovieDialogState extends State<MovieDialog> {
             
       );
 
-  Widget buildAmount() => TextFormField(
+  Widget buildDirectorName() => TextFormField(
         controller: amountController,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
@@ -105,22 +110,7 @@ class _MovieDialogState extends State<MovieDialog> {
             directorname != null && directorname.isEmpty ? 'Enter a valid name' : null,
       );
 
-  // Widget buildRadioButtons() => Column(
-  //       children: [
-  //         RadioListTile<bool>(
-  //           title: Text('Expense'),
-  //           value: true,
-  //           groupValue: isExpense,
-  //           onChanged: (value) => setState(() => isExpense = value!),
-  //         ),
-  //         RadioListTile<bool>(
-  //           title: Text('Income'),
-  //           value: false,
-  //           groupValue: isExpense,
-  //           onChanged: (value) => setState(() => isExpense = value!),
-  //         ),
-  //       ],
-  //     );
+ 
 
   Widget buildCancelButton(BuildContext context) => TextButton(
         child: Text('Cancel'),
@@ -129,7 +119,7 @@ class _MovieDialogState extends State<MovieDialog> {
 
   Widget buildAddButton(BuildContext context, {required bool isEditing}) {
     final text = isEditing ? 'Save' : 'Add';
-
+//if some data is already there then it will be updated
     return TextButton(
       child: Text(text),
       onPressed: () async {
@@ -150,10 +140,13 @@ class _MovieDialogState extends State<MovieDialog> {
       },
     );
   }
+  //storing path
   String?  imagepath;
   final ImagePicker _picker = ImagePicker();
 
-
+/**
+ * picking image from gallry
+ */
   void pickImageGallray()async{
     var image=await _picker.pickImage(source: ImageSource.gallery);
 

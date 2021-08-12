@@ -7,7 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:yellow_class_assignment/boxes/boxes.dart';
 import 'package:yellow_class_assignment/model/transaction.dart';
 import 'package:yellow_class_assignment/movie_page/movie_dialog.dart';
-
+//this class is respnsible for showing data in list to user on main screen
 class MovieListPage extends StatefulWidget {
   @override
   _MovieListPageState createState() => _MovieListPageState();
@@ -27,6 +27,7 @@ class _MovieListPageState extends State<MovieListPage> {
           title: Text('Movie Manager'),
           centerTitle: true,
         ),
+        //valuelistenable will help to fetch the data from hive database
         body: ValueListenableBuilder<Box<Transaction>>(
           valueListenable: Boxes.getTransactions().listenable(),
           builder: (context, box, _) {
@@ -47,6 +48,7 @@ class _MovieListPageState extends State<MovieListPage> {
       );
 
   Widget buildContent(List<Transaction> transactions) {
+    //here checking if database is empty just show there  are no records
     if (transactions.isEmpty) {
       return Center(
         child: Text(
@@ -55,26 +57,12 @@ class _MovieListPageState extends State<MovieListPage> {
         ),
       );
     } else {
-      // final netExpense = transactions.fold<double>(
-      //   0,
-      //   (previousValue, transaction) => transaction.isExpense
-      //       ? previousValue - transaction.amount!
-      //       : previousValue + transaction.amount!,
-      // );
-      // final newExpenseString = '\$${netExpense.toStringAsFixed(2)}';
-      // final color = netExpense > 0 ? Colors.green : Colors.red;
-
+      
+       //else show the items from database
       return Column(
         children: [
           SizedBox(height: 24),
-          // Text(
-          //   'Net Expense: $newExpenseString',
-          //   style: TextStyle(
-          //     fontWeight: FontWeight.bold,
-          //     fontSize: 20,
-          //     color: color,
-          //   ),
-          // ),
+          
           SizedBox(height: 24),
           Expanded(
             child: ListView.builder(
@@ -96,9 +84,7 @@ class _MovieListPageState extends State<MovieListPage> {
     BuildContext context,
     Transaction transaction,
   ) {
-    // final color = transaction.isExpense ? Colors.red : Colors.green;
-   // final date = DateFormat.yMMMd().format(transaction.createdDate);
-  //  final amount = '\$' + transaction.amount!.toStringAsFixed(2);
+   
 
     return Column(
 
@@ -162,7 +148,7 @@ class _MovieListPageState extends State<MovieListPage> {
           )
         ],
       );
-
+  // adding data to our database
   Future addTransaction(String moviename, String directorname,String? imagepath) async {
     final transaction = Transaction()
       ..movieName = moviename
@@ -171,14 +157,10 @@ class _MovieListPageState extends State<MovieListPage> {
 
     final box = Boxes.getTransactions();
     box.add(transaction);
-    //box.put('mykey', transaction);
-
-    // final mybox = Boxes.getTransactions();
-    // final myTransaction = mybox.get('key');
-    // mybox.values;
-    // mybox.keys;
+    
   }
-
+  
+  //updating the transaction
   void editTransaction(
     Transaction transaction,
     String? moviename,
@@ -191,17 +173,15 @@ class _MovieListPageState extends State<MovieListPage> {
     transaction.filePath = filepath!;
    
 
-    // final box = Boxes.getTransactions();
-    // box.put(transaction.key, transaction);
 
     transaction.save();
   }
 
+  //this fuction is respnsible deleting the particular row from the database
   void deleteTransaction(Transaction transaction) {
-    // final box = Boxes.getTransactions();
-    // box.delete(transaction.key);
+   
 
     transaction.delete();
-    //setState(() => transactions.remove(transaction));
+   
   }
 }
